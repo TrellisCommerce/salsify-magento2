@@ -1,0 +1,66 @@
+<?php
+/* @var $block \Trellis\Salsify\Block\System\Config\Readinessreports\ExportTargetSchemaButton */
+$htmlId = $this->getHtmlId();
+?>
+<script>
+	require([
+		'jquery',
+		'prototype',
+	], function(jQuery){
+
+		var syncSpan = jQuery('#<?php echo $htmlId ?>_span');
+
+		<?php if ($this->hasExportAttributes()): ?>
+			var hasExportAttributes = true;
+		<?php else: ?>
+			var hasExportAttributes = false;
+		<?php endif; ?>
+
+		function sync() {
+			params = {};
+
+			new Ajax.Request('<?php echo $block->getAjaxUrl() ?>', {
+				loaderArea:     false,
+				asynchronous:   true,
+				parameters:     params,
+				onCreate: function() {
+					syncSpan.find('.exported').hide();
+					syncSpan.find('.exporting').show();
+					jQuery('#<?php echo $htmlId ?>_message_span').text('');
+				},
+				onSuccess: function(response) {
+
+					console.log(response);
+
+					syncSpan.find('.exporting').hide();
+
+					var resultText = '';
+					if (response.status > 200) {
+						resultText = response.statusText;
+					} else {
+						resultText = 'Success!';
+						window.location = '<?php echo $block->downloadTargetSchemaFile(); ?>';
+						syncSpan.find('.exported').show();
+					}
+					jQuery('#<?php echo $htmlId ?>_message_span').text(resultText);
+				}
+			});
+		}
+
+		jQuery('#<?php echo $htmlId ?>_btn').click(function () {
+			if (hasExportAttributes) {
+				sync();
+			} else {
+				if (confirm('No attributes have been selected to export. If you continue, all product attributes will be exported. Continue?')) {
+					sync();
+				}
+			}
+		});
+	});
+</script>
+<?php echo $block->getButtonHtml() ?>
+<span class="export-target-schema-indicator" id="<?php echo $htmlId ?>_span">
+    <img class="exporting" hidden="hidden" alt="Exporting" style="margin:0 5px" src="<?php echo $block->getViewFileUrl('images/process_spinner.gif') ?>"/>
+    <img class="exported" hidden="hidden" alt="Exported" style="margin:-3px 5px" src="<?php echo $block->getViewFileUrl('images/rule_component_apply.gif') ?>"/>
+    <span id="<?php echo $htmlId ?>_message_span"></span>
+</span>

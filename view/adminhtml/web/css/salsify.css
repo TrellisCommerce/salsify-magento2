@@ -1,0 +1,50 @@
+.accordion .config .value.with-tooltip .clipboard {
+	bottom: 0;
+	float: right;
+	left: 0;
+	margin: 6px -60px 0 0;
+	position: relative;
+	right: 0;
+	top: 0;
+}
+
+.accordion .config .value.with-tooltip .clipboard span a {
+	-webkit-font-smoothing: antialiased;
+	font-family: 'Admin Icons';
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	speak: none;
+}
+
+.accordion .config .value.with-tooltip .clipboard span a:before {
+    color: #41362f;
+    content: '\e602';
+    font-size: 1.7rem;
+}
+
+.accordion .config .value.with-tooltip .clipboard:hover .clipboard-tooltip {
+	display: block;
+	position: absolute;
+	text-shadow: none;
+	z-index: 20;
+	background: rgba(49, 48, 43, 0.8);
+	border-radius: 5px;
+	bottom: 100%;
+	font-size: 13px;
+	line-height: 1.4;
+	margin: 0 -17px 10px 0;
+	max-width: 239px;
+	padding: 18px;
+	right: 0;
+	width: 239px;
+	color: white;
+}
+
+.accordion .config .url-to-clipboard {
+	font-size: 14px;
+}
+
+#row_trellis_salsify_webhook_url .use-default {
+	display: none;
+}

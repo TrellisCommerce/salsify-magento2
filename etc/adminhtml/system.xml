@@ -1,0 +1,470 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+		<tab id="trellis" translate="label" sortOrder="1000">
+			<label>Trellis</label>
+		</tab>
+		<section id="trellis_salsify" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+			<label>Salsify</label>
+			<tab>trellis</tab>
+			<resource>Trellis_Salsify::config</resource>
+
+			<group id="general" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+				<label>General</label>
+				<field id="status" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Enabled</label>
+					<tooltip>Completely enable or disable the Salsify Connector functionality.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+
+				<field id="delete" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Allow Delete</label>
+					<tooltip>Delete products from Magento that no longer appear in Salsify.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+
+				<field id="ignore_timestamp_and_always_update" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Ignore Timestamp and Always Update</label>
+					<tooltip>Update the product even if it was updated in Magento prior to the sync.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+
+				<field id="organization_id" translate="label comment" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Organization ID</label>
+					<tooltip>Organization ID. Retrieve from URL in Salsify App.</tooltip>
+				</field>
+
+				<field id="api_key" translate="label comment" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>API Key</label>
+					<tooltip>Your Salsify API Key.</tooltip>
+				</field>
+
+				<field id="timeout" translate="label comment" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>API Timeout (ms)</label>
+					<tooltip>Timeout the connection if no response is received.</tooltip>
+				</field>
+
+				<field id="visibility_level" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Default New Product Visibility Level</label>
+					<source_model>Magento\Catalog\Model\Product\Visibility</source_model>
+					<tooltip>Visibility level for all new products created.</tooltip>
+				</field>
+
+				<field id="clear_salsify_id" translate="label comment" type="button" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Sync Action</label>
+					<comment>This will remove trellis_salsify_id attribute value from all products.</comment>
+					<frontend_model>Trellis\Salsify\Block\System\Config\General\ClearButton</frontend_model>
+				</field>
+
+			</group>
+
+			<group id="product_feed" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Product Feed</label>
+				<field id="enabled" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Enabled</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+
+				<field id="channel_id" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Channel ID</label>
+					<tooltip>Your Salsify Channel ID.</tooltip>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+
+				<field id="property_mapping" translate="label comment" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Property Mapping</label>
+					<tooltip>Map standard properties in Magento 2 to properties in Salsify. Format is a standard JSON object with the property name being the Salsify field name, and the value being the intended Magento field/attribute(s), supporting either a string or array as the value.</tooltip>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+
+				<field id="attribute_property_mapping" translate="label" sortOrder="998" showInDefault="0" showInWebsite="1" showInStore="1">
+					<label>Magento Attribute/Salsify Property Mapping</label>
+					<frontend_model>Trellis\Salsify\Block\System\Config\Productfeed\AttributePropertyMapping</frontend_model>
+					<backend_model>Trellis\Salsify\Model\Config\Backend\Productfeed\AttributePropertyMapping</backend_model>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+
+				<field id="sync_action" translate="label comment" type="button" sortOrder="999" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Sync Action</label>
+					<comment>Manually sync your Salsify channel.</comment>
+					<frontend_model>Trellis\Salsify\Block\System\Config\Productfeed\SyncButton</frontend_model>
+				</field>
+			</group>
+
+			<group id="readiness_reports" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Readiness Reports</label>
+				<field id="enabled" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Enabled</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+
+				<field id="company_name" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Company Name</label>
+					<tooltip>Your Company Name. This will be used to generate the target schema external ID.</tooltip>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+
+				<field id="channel_id" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Channel ID</label>
+					<tooltip>Your Salsify Channel ID.</tooltip>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+
+				<field id="target_schema_name" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Target Schema Name</label>
+					<tooltip>This required field is the name of your target schema that will show up as a possible selection when you create a new Readiness Report channel in Salsify.
+						This is set on the first creation of the Target Schema and cannot be changed after the fact.
+						Salsify recommends including your company name and the functionality of the Target Schema. e.g. 'My Company's Magento Staging</tooltip>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+
+				<field id="target_schema_callback_url" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Target Schema Callback URL</label>
+					<tooltip>Your Salsify Target Schema Callback URL. This url is requested after you upload the target schema to Salsify.</tooltip>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+
+				<field id="target_schema_attributes" translate="label" sortOrder="998" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Target Schema Attributes To Export</label>
+					<frontend_model>Trellis\Salsify\Block\System\Config\ProductAttributes</frontend_model>
+					<backend_model>Trellis\Salsify\Model\Config\Backend\ProductAttributes</backend_model>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+
+				<field id="export_target_schema" translate="label comment" type="button" sortOrder="999" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Export Target Schema</label>
+					<frontend_model>Trellis\Salsify\Block\System\Config\Readinessreports\ExportTargetSchemaButton</frontend_model>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+
+			</group>
+
+			<group id="webhook" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Webhook</label>
+				<field id="enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="1">
+					<label>Enabled</label>
+					<tooltip>Enable or disable the webhook functionality.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="cron_expr" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Cron Expression</label>
+					<tooltip>Cron expression for the execution of checking for successful webhook publications. Check https://crontab.guru/ for help with expressions.</tooltip>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+				<field id="url" translate="label" type="label" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Webhook URL</label>
+					<frontend_model>Trellis\Salsify\Block\System\Config\Webhook\HookUrl</frontend_model>
+					<tooltip>URL for Salsify Webhook Successful Publication</tooltip>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+			</group>
+
+			<group id="configurable" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Configurable Products</label>
+				<field id="enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Enabled</label>
+					<tooltip>Enable or disable the configurable product functionality.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+			</group>
+
+			<group id="media" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Media &amp; Images</label>
+				<field id="media_gallery_enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Media Gallery Enabled</label>
+					<tooltip>Enable or disable the Media Gallery functionality.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="media_gallery_property" translate="label comment" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Salsify Media Gallery Property</label>
+					<tooltip>Input the Salsify Property which holds additional media images for your product.</tooltip>
+					<depends>
+						<field id="trellis_salsify/media/media_gallery_enabled">1</field>
+					</depends>
+				</field>
+				<field id="image_mapping_enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Image Mapping Enabled</label>
+					<tooltip>Enable or disable the Image Mapping functionality.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<depends>
+						<field id="trellis_salsify/media/media_gallery_enabled">1</field>
+					</depends>
+				</field>
+				<field id="image_mapping" translate="label comment" type="textarea" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Image Tag Mapping</label>
+					<tooltip>Map image role types (for example, 'thumbnail') in Magento 2 to specific image fields in Salsify. Format is a standard JSON object with the property name being the Salsify field name, and the value being an array containing the intended Magento image role.</tooltip>
+					<depends>
+						<field id="trellis_salsify/media/media_gallery_enabled">1</field>
+						<field id="trellis_salsify/media/image_mapping_enabled">1</field>
+					</depends>
+				</field>
+				<field id="video_enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Enable Video</label>
+					<comment>Enable Video Functionality?</comment>
+					<frontend_model>Trellis\Salsify\Block\System\Config\Video</frontend_model>
+				</field>
+				<field id="video_mapping" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Video Property</label>
+					<tooltip>A Salsify Property that holds the json object for product video details.</tooltip>
+					<depends>
+						<field id="trellis_salsify/media/video_enabled">1</field>
+					</depends>
+				</field>
+			</group>
+
+			<group id="attribute_set" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Attribute Set Settings</label>
+				<field id="enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Attribute Set Mapping Enabled</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="update_attribute_sets" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Update Attribute Sets During Sync</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="create_attributes" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Create Attributes During Sync</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+			</group>
+
+			<group id="bundled" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Bundled Products</label>
+				<field id="enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Enabled</label>
+					<tooltip>Enable or disable the bundled product functionality.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+			</group>
+
+			<group id="grouped" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Grouped Products</label>
+				<field id="enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Enabled</label>
+					<tooltip>Enable or disable the grouped product functionality.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+			</group>
+
+			<group id="virtual" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Virtual Products</label>
+				<field id="enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Enabled</label>
+					<tooltip>Enable or disable the virtual product functionality.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="attributes_field" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Salsify Property</label>
+					<tooltip>Salsify property to identify virtual products.</tooltip>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+				<field id="details_field" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Virtual Product Details Field</label>
+					<tooltip>Salsify property for virtual product details.</tooltip>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+			</group>
+
+			<group id="downloadable" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Downloadable Products</label>
+				<field id="enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Enabled</label>
+					<tooltip>Enable or disable the downloadable product functionality.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="details_field" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Downloadable Product Details Field</label>
+					<tooltip>Salsify property for downloadable product details.</tooltip>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+				<field id="sample_field" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Downloadable Product Sample Field</label>
+					<tooltip>Salsify property for downloadable product sample details.</tooltip>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+			</group>
+
+			<group id="websites" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Websites</label>
+				<field id="enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Enable Website ID(s) Mapping</label>
+					<tooltip>Enable or disable the Website ID Mapping functionality.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+			</group>
+
+			<group id="custom_options" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Custom Options</label>
+				<field id="enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Enabled</label>
+					<tooltip>Enable or disable the grouped product functionality.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="attributes_field" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Attributes Field</label>
+					<tooltip>Comma-separated list of skus used to construct the grouped products.</tooltip>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+			</group>
+
+			<group id="product_relations" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Product Relation Settings</label>
+				<comment><![CDATA[These values are <strong>only</strong> applied during product updates, not during product creation.]]></comment>
+				<field id="products_related_enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Related Products Enabled</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="products_crossell_enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Product Crossell Enabled</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="products_upsell_enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Product Upsells Enabled</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+			</group>
+
+			<group id="category" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Category Import Settings</label>
+				<field id="category_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Category Mapping and Generation</label>
+					<tooltip>Enable or disable the Category Mapping and Generation functionality.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="root_node_id" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Category Parent</label>
+					<source_model>Trellis\Salsify\Model\Config\Source\Categorylist</source_model>
+					<tooltip>Specify upon which Magento category all Salsify categories will spawn beneath.</tooltip>
+					<depends>
+						<field id="category_enabled">1</field>
+					</depends>
+				</field>
+				<field id="category_type" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Category Type</label>
+					<tooltip>Category type used to map category generation.</tooltip>
+					<depends>
+						<field id="category_enabled">1</field>
+					</depends>
+					<source_model>Trellis\Salsify\Model\Config\Source\CategoryType</source_model>
+				</field>
+				<field id="category_string_delimiter" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Category String Delimiter</label>
+					<tooltip>Category delimiter (cannot be a comma)</tooltip>
+					<depends>
+						<field id="category_enabled">1</field>
+						<field id="trellis_salsify/category/category_type">2</field>
+					</depends>
+				</field>
+			</group>
+
+			<group id="rabbitmq" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>RabbitMQ</label>
+				<field id="enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Enabled</label>
+					<tooltip>Enable or disable the RabbitMQ functionality.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="host" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Host</label>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+				<field id="port" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Port</label>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+				<field id="user" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>User</label>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+				<field id="password" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Password</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+				<field id="vhost" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>VHost</label>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+				<field id="pagination" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Number of product(s)</label>
+					<tooltip># of product(s) imported (popped from the queue) per cron execution.</tooltip>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+				<field id="cron_expr" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Cron Expression</label>
+					<tooltip>Cron Expression for the execution of the process of message consumption</tooltip>
+					<depends>
+						<field id="enabled">1</field>
+					</depends>
+				</field>
+			</group>
+
+			<group id="debug" translate="label" type="text" sortOrder="999" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Debugging</label>
+				<field id="version" translate="label" type="label" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Version</label>
+					<frontend_model>Trellis\Salsify\Block\System\Config\Version</frontend_model>
+				</field>
+				<field id="debug_download" translate="label comment" type="button" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Download Log File</label>
+					<frontend_model>Trellis\Salsify\Block\System\Config\DebugButton</frontend_model>
+				</field>
+				<field id="clear_debug_log" translate="label comment" type="button" sortOrder="110" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Clear Log File</label>
+					<comment>This will clear the trellis_salsify.log file.</comment>
+					<frontend_model>Trellis\Salsify\Block\System\Config\Debug\ClearDebugButton</frontend_model>
+				</field>
+				<field id="default_clear_debug_log" translate="label comment" type="select" sortOrder="120" showInDefault="1" showInWebsite="0" showInStore="0">
+					<label>Clear Log After Successful Sync</label>
+					<tooltip>Clear the trellis_salsify.log file after successful syncs, so the file doesn't get too big.</tooltip>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+			</group>
+
+		</section>
+	</system>
+</config>

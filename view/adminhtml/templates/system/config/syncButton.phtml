@@ -1,0 +1,47 @@
+<?php /* @var $block \Trellis\Salsify\Block\System\Config\Button */ ?>
+<script>
+    require([
+        'jquery',
+        'prototype',
+    ], function(jQuery){
+
+		var syncSpan = jQuery("#sync_span-<?php echo $block->getButtonId() ?>");
+		var syncText = jQuery("#sync_message_span-<?php echo $block->getButtonId() ?>");
+
+        function sync() {
+            new Ajax.Request('<?php echo $block->getAjaxUrl() ?>', {
+                loaderArea:     false,
+                asynchronous:   true,
+                onCreate: function() {
+                    syncSpan.find('.synced').hide();
+                    syncSpan.find('.syncing').show();
+                    syncText.text('');
+                },
+                onSuccess: function(response) {
+                    console.log(response);
+                    syncSpan.find('.syncing').hide();
+                    syncSpan.find('.synced').show();
+                    syncText.text('Success!');
+                },
+                onFailure: function(response) {
+                    console.log(response.responseJSON.error_message);
+                    syncSpan.find('.syncing').hide();
+                    syncText.text(response.responseJSON.error_message);
+                }
+            });
+        }
+
+        jQuery('#<?php echo $block->getButtonId() ?>').click(function () {
+            sync();
+        });
+    });
+</script>
+<?php echo $block->getButtonHtml() ?>
+<span class="sync-indicator" id="sync_span-<?php echo $block->getButtonId() ?>">
+    <img class="syncing" hidden="hidden" alt="Syncing" style="margin:0 5px" src="<?php echo $block->getViewFileUrl('images/process_spinner.gif') ?>"/>
+    <img class="synced" hidden="hidden" alt="Synced" style="margin:-3px 5px" src="<?php echo $block->getViewFileUrl('images/rule_component_apply.gif') ?>"/>
+    <p>
+        <span id="sync_message_span-<?php echo $block->getButtonId() ?>"></span>
+    </p>
+</span>
+

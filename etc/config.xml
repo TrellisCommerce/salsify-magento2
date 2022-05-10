@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <trellis_salsify>
+            <general>
+                <timeout>10000</timeout>
+            </general>
+            <product_feed>
+                <property_mapping>{}</property_mapping>
+            </product_feed>
+            <webhook>
+                <cron_expr>*/15 * * * *</cron_expr>
+            </webhook>
+            <mapping>
+                <category_enabled>1</category_enabled>
+                <category>category</category>
+                <ready_for_import>magento_ready</ready_for_import>
+                <store>magento_store</store>
+                <website_enabled>0</website_enabled>
+                <website>magento_website_codes</website>
+            </mapping>
+            <category>
+                <root_node_id>1</root_node_id>
+            </category>
+            <rabbitmq>
+                <host>localhost</host>
+                <port>5672</port>
+                <user>guest</user>
+                <password>guest</password>
+                <vhost>/</vhost>
+                <pagination>10</pagination>
+                <cron_expr>*/15 * * * *</cron_expr>
+            </rabbitmq>
+            <debug>
+                <default_clear_debug_log>0</default_clear_debug_log>
+            </debug>
+        </trellis_salsify>
+    </default>
+</config>

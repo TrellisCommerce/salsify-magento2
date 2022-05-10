@@ -1,0 +1,51 @@
+<?php /* @var $block \Trellis\Salsify\Block\System\Config\DebugButton */ ?>
+<script>
+    require([
+        'jquery',
+        'prototype',
+    ], function(jQuery){
+
+        var debugSpan = jQuery('#debug_span');
+
+        function debug() {
+            params = {};
+
+            new Ajax.Request('<?php echo $block->downloadLogFiles('trellis_salsify.log') ?>', {
+                loaderArea:     false,
+                asynchronous:   true,
+                parameters:     params,
+                onCreate: function() {
+                    debugSpan.find('.downloaded').hide();
+                    debugSpan.find('.downloading').show();
+                    jQuery('#debug_message_span').text('');
+                },
+                onSuccess: function(response) {
+
+                    console.log(response);
+
+                    debugSpan.find('.downloading').hide();
+
+                    var resultText = '';
+                    if (response.status > 200) {
+                        resultText = response.statusText;
+                    } else {
+                        resultText = 'Success!';
+                        window.location = '<?php echo $block->downloadLogFiles('trellis_salsify.log'); ?>';
+                        debugSpan.find('.downloaded').show();
+                    }
+                    jQuery('#debug_message_span').text(resultText);
+                }
+            });
+        }
+
+        jQuery('#debug_btn').click(function () {
+            debug();
+        });
+    });
+</script>
+<?php echo $block->getButtonHtml() ?>
+<span class="debug-indicator" id="debug_span">
+    <img class="downloading" hidden="hidden" alt="Downloading" style="margin:0 5px" src="<?php echo $block->getViewFileUrl('images/process_spinner.gif') ?>"/>
+    <img class="downloaded" hidden="hidden" alt="Downloaded" style="margin:-3px 5px" src="<?php echo $block->getViewFileUrl('images/rule_component_apply.gif') ?>"/>
+    <span id="debug_message_span"></span>
+</span>

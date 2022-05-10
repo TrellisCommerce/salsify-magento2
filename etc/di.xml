@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Trellis\Salsify\Api\ClientInterface" type="Trellis\Salsify\Model\Client" />
+    <preference for="Trellis\Salsify\Api\Data\SalsifyRecordInterface" type="Trellis\Salsify\Model\SalsifyRecord"/>
+    <preference for="Trellis\Salsify\Api\Data\SalsifyProductInterface" type="Trellis\Salsify\Model\Record\SalsifyProduct"/>
+    <preference for="Trellis\Salsify\Api\WebHookUpdateInterface" type="Trellis\Salsify\Service\WebHookUpdate" />
+    <preference for="Trellis\Salsify\Api\PayloadRepositoryInterface" type="Trellis\Salsify\Model\PayloadRepository" />
+    <preference for="Trellis\Salsify\Api\Data\PayloadSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+
+    <type name="Trellis\Salsify\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Trellis\Salsify\Logger\ErrorHandler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+
+    <type name="Trellis\Salsify\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">salsifyLogger</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="error" xsi:type="object">Trellis\Salsify\Logger\ErrorHandler</item>
+                <item name="system" xsi:type="object">Trellis\Salsify\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="salsify_message_queue_consumer" xsi:type="object">Trellis\Salsify\Console\Command\ProductConsumer</item>
+                <item name="salsify_create_test_categories" xsi:type="object">Trellis\Salsify\Console\Command\CreateTestCategories</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Trellis\Salsify\Console\Command\ProductConsumer">
+        <arguments>
+            <argument name="rabbitMq" xsi:type="object">Trellis\Salsify\Model\Config\Rabbitmq\Proxy</argument>
+            <argument name="productConsumer" xsi:type="object">Trellis\Salsify\Model\Queue\ProductConsumer\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="salsify_payload_listing_data_source" xsi:type="string">Trellis\Salsify\Model\ResourceModel\Payload\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
